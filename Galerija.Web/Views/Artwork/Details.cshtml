@@ -1,0 +1,90 @@
+﻿@model Galerija.Model.Artwork
+
+@{
+    ViewData["Title"] = "Detalji o umjetničkom djelu";
+}
+
+<h2>Detalji o umjetničkom djelu</h2>
+
+@if (Model != null)
+{
+    <ol class="breadcrumb">
+        <li><a asp-action="Index">Popis umjetničkih djela</a></li>
+        <li style="margin-left: 5px; margin-right: 5px;"> \ </li>
+        <li class="active">@Model.Name</li>
+    </ol>
+
+    <div>
+        <h4>Umjetnina</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                ID
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ID)
+            </dd>
+            <dt>
+                Naziv
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt>
+                Opis
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt>
+                Godina dovršetka
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.YearCompleted)
+            </dd>
+            <dt>
+                Umjetnički period
+            </dt>
+            <dd>
+                @Model?.ArtPeriod?.Name
+            </dd>
+            <dt>
+                Umjetnik
+            </dt>
+            <dd>
+                @Model?.Artist?.FullName
+            </dd>
+            <dt>
+                Prilozi (slike)
+            </dt>
+            <dd>
+                @if (Model.Images != null && Model.Images.Any())
+                {
+                    <ul>
+                        @foreach (var image in Model.Images)
+                        {
+                            <li style="list-style-type: none;">
+                                @* Mičem wwwroot/ iz patha *@
+                                <img src="../../@image.FilePath.Substring(8)" alt="@image.FileName" style="max-width: 400px; max-height: 400px;" />
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p>Nema slika.</p>
+                }
+            </dd>
+        </dl>
+
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary">Uredi</a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        Nije odabran ispravni ID umjetničkog djela.
+    </div>
+}

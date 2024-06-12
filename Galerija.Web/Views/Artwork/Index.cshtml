@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Galerija.Model.Artwork>
+
+@{
+    ViewData["Title"] = "Artwork";
+}
+
+<h1>Djela</h1>
+
+@if (Model != null)
+{
+	<table class="table">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Naziv</th>
+			<th>Opis</th>
+			<th>Godina</th>
+			<th>Razdoblje</th>
+			<th>Umjetnik</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var artwork in Model)
+		{
+			<tr>
+				<td>@artwork.ID</td>
+				<td>
+					<a asp-action="Details" asp-route-id="@artwork.ID">@artwork.Name</a>
+				</td>
+				<td>@artwork.Description</td>
+				<td>@artwork.YearCompleted</td>
+				<td>
+					@if (artwork.ArtPeriod != null)
+					{
+						@artwork.ArtPeriod.Name
+					}
+				<td>
+					@if (artwork.Artist != null)
+					{
+						@artwork.Artist.FullName
+					}
+				</td>
+
+				<td>
+					<a asp-action="Edit" asp-route-id="@artwork.ID">[edit]</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+	</table>
+}
+else
+{
+<div class="alert alert-danger">
+	Nije odabran ispravni ID klijenta.
+</div>
+}
+
+

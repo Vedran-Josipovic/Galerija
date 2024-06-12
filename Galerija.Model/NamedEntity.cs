@@ -16,7 +16,7 @@ namespace Galerija.Model
         [MinLength(3, ErrorMessage = "Name must be at least 3 characters long")]
         public string Name { get; set; }
 
-        [MinLength(10, ErrorMessage = "Description must be at least 10 characters long")]
+        [MinLength(3, ErrorMessage = "Description must be at least 3 characters long")]
         public string? Description { get; set; }
     }
 }

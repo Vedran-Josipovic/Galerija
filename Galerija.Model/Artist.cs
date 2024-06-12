@@ -21,7 +21,7 @@ namespace Galerija.Model
         public string LastName { get; set; }
 
         [Required]
-        [MinLength(10, ErrorMessage = "Biography must be at least 10 characters long")]
+        [MinLength(3, ErrorMessage = "Biography must be at least 3 characters long")]
         public string Biography { get; set; }
 
         [Required]

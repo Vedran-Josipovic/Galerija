@@ -1,0 +1,67 @@
+﻿@model Galerija.Model.Artwork
+
+@{
+    ViewData["Title"] = "Edit";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <input type="hidden" asp-for="ID" />
+            <partial name="_CreateOrEdit" />
+        </form>
+    </div>
+    <div class="col-md-8">
+        <p class="fw-bold">Priložci</p>
+
+        <div id="AttachmentList">
+            <partial name="_AttachmentList" model="new List<ImageAttachment>()" />
+        </div>
+
+        <br />
+        <br />
+
+        <p class="fw-bold">Prenesite datoteke</p>
+        <form id="Upload" class="dropzone">
+        </form>
+
+    </div>
+
+    @section Scripts {
+        <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+        <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+        <script>
+            var artworkID = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ID));
+
+            function getAttachments() {
+                $.ajax({
+                    url: "/Artwork/GetAttachments",
+                    data: { artworkID: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ID)) },
+                    success: function (data) {
+                        $("#AttachmentList").html(data);
+                    }
+                });
+            }
+
+
+            Dropzone.autoDiscover = false;
+            $(document).ready(function () {
+                $("#Upload").dropzone({
+                    url: "/Artwork/UploadAttachment?artworkID=" + artworkID,
+                    acceptedFiles: "image/*",
+                    success: function (file, response) {
+                        console.log(response);
+                        location.reload();
+                    }
+                });
+                getAttachments();
+
+            });
+
+        </script>
+    }
+
+
+</div>

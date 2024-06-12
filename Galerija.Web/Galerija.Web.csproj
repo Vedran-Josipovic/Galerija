@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Galerija.Model\Galerija.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Attachments\" />
+  </ItemGroup>
+
 </Project>
