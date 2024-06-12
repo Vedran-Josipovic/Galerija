@@ -22,6 +22,6 @@ namespace Galerija.Model
         public virtual Artist Artist { get; set; }
 
 
-        public virtual ICollection<Attachment>? Images { get; set; }
+        public virtual ICollection<ImageAttachment>? Images { get; set; }
     }
 }

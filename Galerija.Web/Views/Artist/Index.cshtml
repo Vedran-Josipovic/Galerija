@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Galerija.Model.Artist>
+
+@{
+    ViewData["Title"] = "Artists";
+}
+
+<h1>Artists</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ime</th>
+            <th>Biografija</th>
+            <th>Rođen</th>
+            <th>Preminuo</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var artist in Model)
+        {
+            <tr>
+                <td>@artist.ID</td>
+                <td>@artist.FullName</td>
+                <td>@artist.Biography</td>
+                <td>@artist.DateOfBirth.ToShortDateString()</td>
+                <td>@(artist.DateOfDeath.HasValue ? artist.DateOfDeath.Value.ToShortDateString() : "")</td>
+            </tr>
+        }
+    </tbody>
+</table>

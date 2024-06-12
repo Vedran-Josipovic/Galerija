@@ -1,7 +1,15 @@
+using Galerija.DAL;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<GalleryManagerDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("GalleryManagerDbContext"),
+            opt => opt.MigrationsAssembly("Galerija.DAL")));
 
 var app = builder.Build();
 
