@@ -123,6 +123,21 @@ namespace Galerija.Web.Controllers
             return View(model);
         }
 
+        [ActionName(nameof(Delete))]
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var exhibition = _dbContext.Exhibitions.Find(id);
+            if (exhibition == null)
+            {
+                return NotFound();
+            }
+
+            _dbContext.Exhibitions.Remove(exhibition);
+            _dbContext.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
 
 
     }
