@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Galerija.Model.Exhibition>
+
+@{
+    ViewData["Title"] = "Exhibition";
+}
+
+<h1>Exhibitions</h1>
+
+<p>
+    <a asp-action="Create">Add New Exhibition</a>
+</p>
+
+@if (Model != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Museum</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var exhibition in Model)
+            {
+                <tr>
+                    <td>@exhibition.ID</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@exhibition.ID">@exhibition.Name</a>
+                    </td>
+                    <td>@exhibition.Description</td>
+                    <td>@exhibition.StartDate.ToString("yyyy-MM-dd")</td>
+                    <td>@(exhibition.EndDate?.ToString("yyyy-MM-dd") ?? "Ongoing")</td>
+                    <td>
+                        @if (exhibition.Museum != null)
+                        {
+                            @exhibition.Museum.Name
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@exhibition.ID">[edit]</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-danger">
+        No exhibitions available.
+    </div>
+}

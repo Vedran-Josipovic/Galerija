@@ -1,0 +1,89 @@
+﻿@model Galerija.Model.Exhibition
+
+@{
+    ViewData["Title"] = "Detalji o izložbi";
+}
+
+<h2>Detalji o izložbi</h2>
+
+@if (Model != null)
+{
+    <ol class="breadcrumb">
+        <li><a asp-action="Index">Popis izložbi</a></li>
+        <li style="margin-left: 5px; margin-right: 5px;"> \ </li>
+        <li class="active">@Model.Name</li>
+    </ol>
+
+    <div>
+        <h4>Izložba</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                ID
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ID)
+            </dd>
+            <dt>
+                Naziv
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt>
+                Opis
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt>
+                Datum početka
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.StartDate)
+            </dd>
+            <dt>
+                Datum završetka
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.EndDate)
+            </dd>
+            <dt>
+                Muzej
+            </dt>
+            <dd>
+                @Model?.Museum?.Name
+            </dd>
+            <dt>
+                Umjetnička djela
+            </dt>
+            <dd>
+                @if (Model.Artworks != null && Model.Artworks.Any())
+                {
+                    <ul>
+                        @foreach (var artwork in Model.Artworks)
+                        {
+                            <li>
+                                @artwork.Name
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p>Nema umjetničkih djela.</p>
+                }
+            </dd>
+        </dl>
+
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary">Uredi</a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        Nije odabran ispravni ID izložbe.
+    </div>
+}

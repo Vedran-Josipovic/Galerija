@@ -1,0 +1,60 @@
+﻿@model Galerija.Model.Exhibition
+
+<ol class="breadcrumb">
+    <li><a asp-action="Index">Popis izložbi</a></li>
+    <li style="margin-left: 5px; margin-right: 5px;"> \ </li>
+
+    @if (Model != null)
+    {
+        <li><a asp-action="Details" asp-route-id="@Model.ID">@Model.Name</a></li>
+        <li style="margin-left: 5px; margin-right: 5px;"> \ </li>
+        <li class="active">Uredi</li>
+    }
+    else
+    {
+        <li class="active">Nova izložba</li>
+    }
+</ol>
+
+<form asp-action="Edit" method="post">
+    <div class="form-group">
+        <label class="control-label">Naziv</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Opis</label>
+        <textarea asp-for="Description" class="form-control" rows="8"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Datum početka</label>
+        <input asp-for="StartDate" class="form-control" type="date" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Datum završetka</label>
+        <input asp-for="EndDate" class="form-control" type="date" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Muzej</label>
+        <select asp-for="MuseumID" asp-items="ViewBag.PossibleMuseums" class="form-control"></select>
+        <span asp-validation-for="MuseumID" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Umjetnička djela</label>
+        <select asp-for="Artworks" asp-items="ViewBag.PossibleArtworks" class="form-control" multiple></select>
+        <span asp-validation-for="Artworks" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Spremi" class="btn btn-outline-success" />
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
