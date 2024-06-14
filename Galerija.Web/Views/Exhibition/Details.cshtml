@@ -54,26 +54,6 @@
             <dd>
                 @Model?.Museum?.Name
             </dd>
-            <dt>
-                Umjetnička djela
-            </dt>
-            <dd>
-                @if (Model.Artworks != null && Model.Artworks.Any())
-                {
-                    <ul>
-                        @foreach (var artwork in Model.Artworks)
-                        {
-                            <li>
-                                @artwork.Name
-                            </li>
-                        }
-                    </ul>
-                }
-                else
-                {
-                    <p>Nema umjetničkih djela.</p>
-                }
-            </dd>
         </dl>
 
         <div>

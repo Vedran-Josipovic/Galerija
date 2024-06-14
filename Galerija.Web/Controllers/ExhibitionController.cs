@@ -36,24 +36,6 @@ namespace Galerija.Web.Controllers
             ViewBag.PossibleMuseums = selectItems;
         }
 
-        private void FillDropdownValuesArtworks()
-        {
-            var selectItems = new List<SelectListItem>();
-
-            var listItem = new SelectListItem();
-            listItem.Text = "- odaberite -";
-            listItem.Value = "";
-            selectItems.Add(listItem);
-
-            foreach (var artwork in _dbContext.Artworks)
-            {
-                listItem = new SelectListItem(artwork.Name, artwork.ID.ToString());
-                selectItems.Add(listItem);
-            }
-
-            ViewBag.PossibleArtworks = selectItems;
-        }
-
         [ActionName(nameof(Edit))]
         public IActionResult Edit(int id)
         {
@@ -63,7 +45,6 @@ namespace Galerija.Web.Controllers
                 return NotFound();
             }
             FillDropdownValuesMuseums();
-            FillDropdownValuesArtworks();
             return View(exhibition);
         }
 
@@ -87,11 +68,9 @@ namespace Galerija.Web.Controllers
             }
 
             FillDropdownValuesMuseums();
-            FillDropdownValuesArtworks();
             return View(exhibition);
         }
 
-        //details
         public IActionResult Details(int id)
         {
             var exhibition = _dbContext.Exhibitions
@@ -103,6 +82,45 @@ namespace Galerija.Web.Controllers
                 return NotFound();
             }
             return View(exhibition);
+        }
+
+        [ActionName(nameof(Create))]
+        public IActionResult Create()
+        {
+            FillDropdownValuesMuseums();
+            return View();
+        }
+        
+        [HttpPost]
+        [ActionName(nameof(Create))]
+        public async Task<IActionResult> CreatePost(Exhibition model)
+        {
+            var museum = await _dbContext.Museums.FindAsync(model.MuseumID);
+
+            if (museum == null)
+            {
+                ModelState.AddModelError("MuseumID", "Invalid Museum");
+            }
+
+            model.Museum = museum;
+            ModelState.Remove(nameof(model.ID));
+            ModelState.Remove(nameof(model.Museum));
+
+            if (this.ModelState.IsValid)
+            {
+                _dbContext.Exhibitions.Add(model);
+                _dbContext.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            foreach (var error in errors)
+            {
+                Console.WriteLine(error.ErrorMessage);
+            }
+
+            FillDropdownValuesMuseums();
+            return View(model);
         }
 
 
