@@ -238,7 +238,8 @@ namespace Galerija.Web.Controllers
             {
                 _dbContext.Artworks.Remove(artwork);
                 _dbContext.SaveChanges();
-                return Ok();
+
+                return RedirectToAction(nameof(Index));
             }
 
             return NotFound();

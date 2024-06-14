@@ -12,6 +12,15 @@
             <input type="hidden" asp-for="ID" />
             <partial name="_CreateOrEdit" />
         </form>
+
+        <br />
+        <form asp-action="Delete" method="post">
+			<input type="hidden" asp-for="ID" />
+			<input type="submit" value="Delete" class="btn btn-danger" />
+        </form>
+
+
+
     </div>
     <div class="col-md-8">
         <p class="fw-bold">Priložci</p>
