@@ -1,0 +1,21 @@
+﻿@model Galerija.Model.Artwork
+
+@{
+	ViewData["Title"] = "Create";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+	<div class="row">
+		<div class="col-md-4">
+			<form asp-action="Create" method="post">
+				<input type="hidden" asp-for="ID" />
+				<partial name="_CreateOrEdit" />
+			</form>
+		</div>
+	</div>
+
+
+
+

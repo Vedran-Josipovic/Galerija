@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using System.Net.Mail;
 
@@ -27,17 +28,6 @@ namespace Galerija.Web.Controllers
             var model = _dbContext.Artworks.Include(a => a.Artist).Include(a => a.ArtPeriod).ToList();
 			return View(model);
         }
-
-
-        //public IActionResult Details(int id)
-        //{
-        //    var artwork = _dbContext.Artworks.Include(a => a.Artist).Include(a => a.ArtPeriod).Include(a => a.Images).FirstOrDefault(a => a.ID == id);
-        //    if (artwork == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(artwork);
-        //}
 
         private void FillDropdownValuesArtPeriods()
         {
@@ -148,24 +138,6 @@ namespace Galerija.Web.Controllers
 		}
 
 
-        //public IActionResult DeleteAttachment(int attachmentID, int artworkID)
-        //{
-        //	var attachment = _dbContext.ImageAttachments.Find(attachmentID);
-        //	if (attachment != null)
-        //	{
-        //		var attachmentPath = Path.Combine(_webHostEnvironment.WebRootPath, "Attachments", attachment.FileName);
-        //		if (System.IO.File.Exists(attachmentPath))
-        //		{
-        //			System.IO.File.Delete(attachmentPath);
-        //		}
-
-        //		_dbContext.ImageAttachments.Remove(attachment);
-        //		_dbContext.SaveChanges();
-        //	}
-
-        //	return RedirectToAction(nameof(Details), new { id = artworkID });
-        //}
-
         [HttpPost]
         public IActionResult DeleteAttachment(int attachmentID, int artworkID)
         {
@@ -200,5 +172,77 @@ namespace Galerija.Web.Controllers
             return View(artwork);
         }
 
+
+        [ActionName(nameof(Create))]
+        public IActionResult Create()
+        {
+            this.FillDropdownValuesArtists();
+            this.FillDropdownValuesArtPeriods();
+            return View();
+        }
+
+        [HttpPost]
+        [ActionName(nameof(Create))]
+        public async Task<IActionResult> CreatePost(Artwork model)
+        {
+            var artist = await _dbContext.Artists.FindAsync(model.ArtistID);
+            var artPeriod = await _dbContext.ArtPeriods.FindAsync(model.PeriodID);
+
+            if (artist == null)
+            {
+                ModelState.AddModelError(nameof(model.ArtistID), "Selected artist does not exist.");
+            }
+            if (artPeriod == null)
+            {
+                ModelState.AddModelError(nameof(model.PeriodID), "Selected art period does not exist.");
+            }
+
+            model.Artist = artist;
+            model.ArtPeriod = artPeriod;
+
+            ModelState.Remove(nameof(model.ID));
+            ModelState.Remove(nameof(model.Artist));
+            ModelState.Remove(nameof(model.ArtPeriod));
+
+            if (!ModelState.IsValid)
+            {
+                foreach (var state in ModelState)
+                {
+                    var key = state.Key;
+                    var errors = state.Value.Errors;
+                    var attemptedValue = state.Value.AttemptedValue;
+                    foreach (var error in errors)
+                    {
+                        Console.WriteLine($"Key: {key}, Error: {error.ErrorMessage}, Attempted Value: {attemptedValue}");
+                    }
+                }
+
+                this.FillDropdownValuesArtists();
+                this.FillDropdownValuesArtPeriods();
+                return View(model);
+            }
+
+            _dbContext.Artworks.Add(model);
+            await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var artwork = _dbContext.Artworks.Find(id);
+            if (artwork != null)
+            {
+                _dbContext.Artworks.Remove(artwork);
+                _dbContext.SaveChanges();
+                return Ok();
+            }
+
+            return NotFound();
+        }
+        
     }
 }

@@ -3,40 +3,47 @@
 <ol class="breadcrumb">
     <li><a asp-action="Index">Popis umjetničkih djela</a></li>
     <li style="margin-left: 5px; margin-right: 5px;"> \ </li>
-    <li class="active">@Model.Name</li>
+    
+    @if (Model != null)
+    {
+        <li><a asp-action="Details" asp-route-id="@Model.ID">@Model.Name</a></li>
+        <li style="margin-left: 5px; margin-right: 5px;"> \ </li>
+        <li class="active">Uredi</li>
+    }
+    else
+    {
+        <li class="active">Novo umjetničko djelo</li>
+    }
 </ol>
 
-<div class="form-group">
-    <label class="control-label">Naziv</label>
-    <input asp-for="Name" class="form-control" />
-    <span asp-validation-for="Name" class="text-danger"></span>
-</div>
-<div class="form-group">
-    <label class="control-label">Opis</label>
-    <textarea asp-for="Description" class="form-control" rows="8"></textarea>
-    <span asp-validation-for="Description" class="text-danger"></span>
-</div>
-<div class="form-group">
-    <label class="control-label">Godina dovršetka</label>
-    <input asp-for="YearCompleted" class="form-control" />
-    <span asp-validation-for="YearCompleted" class="text-danger"></span>
-</div>
-<div class="form-group">
-    <label class="control-label">Umjetnički period</label>
-    <select asp-for="PeriodID" asp-items="ViewBag.PossibleArtPeriods" class="form-control"></select>
-    <span asp-validation-for="PeriodID" class="text-danger"></span>
-</div>
-<div class="form-group">
-    <label class="control-label">Umjetnik</label>
-    <select asp-for="ArtistID" asp-items="ViewBag.PossibleArtists" class="form-control"></select>
-    <span asp-validation-for="ArtistID" class="text-danger"></span>
-</div>
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label class="control-label">Naziv</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Opis</label>
+        <textarea asp-for="Description" class="form-control" rows="8"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Godina dovršetka</label>
+        <input asp-for="YearCompleted" class="form-control" />
+        <span asp-validation-for="YearCompleted" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Umjetnički period</label>
+        <select asp-for="PeriodID" asp-items="ViewBag.PossibleArtPeriods" class="form-control"></select>
+        <span asp-validation-for="PeriodID" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Umjetnik</label>
+        <select asp-for="ArtistID" asp-items="ViewBag.PossibleArtists" class="form-control"></select>
+        <span asp-validation-for="ArtistID" class="text-danger"></span>
+    </div>
 
-@* <div class="form-group">
-    <label class="control-label">Prilozi (slike)</label>
-    <input type="file" asp-for="Images" class="form-control" multiple />
-    <span asp-validation-for="Images" class="text-danger"></span>
-</div> *@
-<div class="form-group">
-    <input type="submit" value="Spremi" class="btn btn-outline-success" />
-</div>
+    <div class="form-group">
+        <input type="submit" value="Spremi" class="btn btn-outline-success" />
+    </div>
+</form>
